@@ -1,3 +1,4 @@
 # List of things items require to be installed during development
 
 tornado 2.0
+eyeD3 0.6.17
