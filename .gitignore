@@ -1,2 +1,7 @@
 *.pyc
+<<<<<<< HEAD
 system_settings.py
+=======
+
+.DS_Store
+>>>>>>> adding mac specific files to ignore list
