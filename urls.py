@@ -12,5 +12,7 @@ urlpatterns = patterns('',
 
     # Uncomment the next line to enable the admin:
     url(r'^$', 'backend.views.home'),
+    url(r'^api/get/music_home', 'backend.views.api_get_music_home'),
+    url(r'^api/post/add_song', 'backend.views.api_post_add_song'),
     url(r'^admin/', include(admin.site.urls)),
 )
