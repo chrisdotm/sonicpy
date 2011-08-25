@@ -77,6 +77,7 @@ INSTALLED_APPS = (
     'django.contrib.comments',
     'django.contrib.flatpages',
     'django.contrib.markup',
+    'sonicpy.backend',
 
 )
 DEBUG_TOOLBAR_CONFIG = {
