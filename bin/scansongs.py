@@ -4,31 +4,43 @@ import json
 import sys
 import mutagen
 
+
+api_host = "localhost:8000"
+
+
 def main():
     music_home = {'music_home': None}
     try:
-        music_home_fh = urllib.urlopen("http://localhost:8000/api/get/music_home")
+        music_home_fh = urllib.urlopen(
+                "http://%s/api/get/music_home" % api_host)
         music_home = json.loads(music_home_fh.read())
     except Exception, e:
-        print e
+        logerror(e)
 
     music_home_path = music_home['music_home']
     scan_dir(music_home_path)
+
 
 def scan_dir(path):
     if os.path.isdir(path):
         for root, dirs, files in os.walk(path):
             parse_tree(root, dirs, files)
     else:
+        logerror("%s is not a valid path" % path)
         sys.exit(1)
+
 
 def parse_tree(root, dirs, files):
     if len(dirs) == 0:
         for f in files:
             full_path = os.path.join(root, f)
-            data = mutagen.File(full_path, easy=True)
-            if data is not None:
-                add_song(data, full_path)
+            try:
+                data = mutagen.File(full_path, easy=True)
+                if data is not None:
+                    add_song(data, full_path)
+            except Exception, e:
+                logerror(e)
+
 
 def add_song(song_data, path):
     try:
@@ -37,19 +49,21 @@ def add_song(song_data, path):
                 'data': json.dumps(dict(song_data)),
                 'path': json.dumps(path)}
         params = urllib.urlencode(upload)
-        fh = urllib.urlopen("http://localhost:8000/api/post/add_song", params)
+        fh = urllib.urlopen("http://%s/api/post/add_song" % api_host, params)
         print fh.read()
-    except Exception, e :
-        print e
+    except Exception, e:
+        logerror(e)
+
+
+def logerror(error_msg):
+    real_msg = "ERR: %s --- %s" % (os.path.basename(__file__), error_msg)
+    params = urllib.urlencode({'error_message': real_msg})
+    try:
+        fh = urllib.urlopen("http://%s/api/post/error_log" % api_host, params)
+        fh.read()
+    except Exception, e:
+        pass  # nothing really left to do now
+
 
 if __name__ == '__main__':
     main()
-#os.environ['DJANGO_SETTINGS_MODULE'] = 'sonicpy.settings'
-#print settings.MUSIC_HOME
-#import sys
-#import os
-#thisdir = os.path.dirname(os.path.abspath(__file__))
-
-#sys.path.append(os.path.join(thisdir, '../'))
-
-#print sys.path
