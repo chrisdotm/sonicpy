@@ -14,5 +14,6 @@ urlpatterns = patterns('',
     url(r'^$', 'backend.views.home'),
     url(r'^api/get/music_home', 'backend.views.api_get_music_home'),
     url(r'^api/post/add_song', 'backend.views.api_post_add_song'),
+    url(r'^api/post/error_log', 'backend.views.api_post_error_log'),
     url(r'^admin/', include(admin.site.urls)),
 )

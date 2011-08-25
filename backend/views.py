@@ -25,7 +25,12 @@ def api_get_music_home(request):
 #/api/post/
 def api_post_add_song(request):
     if request.method == 'POST':
-        print request
+        return HttpResponse("OK")
+    else:
+        return HttpResponse("NO")
+
+def api_post_error_log(request):
+    if request.method == 'POST':
         return HttpResponse("OK")
     else:
         return HttpResponse("NO")
